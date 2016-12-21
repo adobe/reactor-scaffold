@@ -215,7 +215,7 @@ const getNamePrompt = (nameSingular, invalidNames = []) => {
   return {
     type: 'input',
     name: 'name',
-    message: `What is the name of the ${nameSingular}? This won't be shown to users of DTM; it's merely a simple identifier.`,
+    message: `What is the name of the ${nameSingular}? This won't be shown to users of DTM; it's merely a simple identifier. It must consist of lowercase, URL-safe characters.`,
     validate(input) {
       if (invalidNames.indexOf(input) !== -1) {
         return input + ' is already being used.';
