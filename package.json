@@ -22,7 +22,7 @@
     "reactor-scaffold": "./bin/index.js"
   },
   "dependencies": {
-    "@reactor/extension-support-validator": "^1.1.0",
+    "@reactor/extension-support-validator": "*",
     "@reactor/turbine-schemas": "*",
     "camelcase": "^4.0.0",
     "clone": "^2.1.0",
