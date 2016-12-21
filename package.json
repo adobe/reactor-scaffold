@@ -19,9 +19,14 @@
     "dtm"
   ],
   "bin": {
-    "scaffold" : "./bin/index.js"
+    "reactor-scaffold": "./bin/index.js"
   },
   "dependencies": {
+    "@reactor/extension-support-validator": "^1.1.0",
+    "@reactor/turbine-schemas": "*",
+    "camelcase": "^4.0.0",
+    "clone": "^2.1.0",
+    "fs-extra": "^1.0.0",
     "inquirer": "^2.0.0"
   }
 }
