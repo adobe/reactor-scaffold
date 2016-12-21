@@ -216,13 +216,22 @@ const getNamePrompt = (nameSingular, invalidNames = []) => {
     type: 'input',
     name: 'name',
     message: `What is the name of the ${nameSingular}? This won't be shown to users of DTM; it's merely a simple identifier. It must consist of lowercase, URL-safe characters.`,
+    default(answers) {
+      if (answers.displayName) {
+        // Attempt at making a decent default name based on the display name they provided.
+        return answers.displayName
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9~_\\.\\-]/g, '');
+      }
+    },
     validate(input) {
       if (invalidNames.indexOf(input) !== -1) {
         return input + ' is already being used.';
       }
 
       if (!new RegExp(schema.definitions.name.pattern).test(input)) {
-        return 'Must consist of lowercase, URL-safe characters.'
+        return 'Required. Must consist of lowercase, URL-safe characters.'
       }
 
       return true;
@@ -249,7 +258,7 @@ const promptTopLevelFields = (manifest) => {
       default: '1.0.0',
       validate(input) {
         if (!new RegExp(schema.definitions.semver.pattern).test(input)) {
-          return 'Must match semantic versioning rules.';
+          return 'Required. Must match semantic versioning rules.';
         }
 
         return true;
@@ -261,7 +270,7 @@ const promptTopLevelFields = (manifest) => {
       message: 'Please provide a short description of your extension.',
       validate(input) {
         if (!input.length) {
-          return 'Required';
+          return 'Required.';
         }
 
         return true;
