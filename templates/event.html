@@ -5,28 +5,23 @@
     <title>Event</title>
   </head>
   <body>
-    <label>
-      <span>Delay</span>
-      <input id="delay" placeholder="1000">
-    </label>
+    Event Template
 
-    <script src="//assets.adobedtm.com/activation/reactor/extensionbridge/extensionbridge.min.js"></script>
+    <script src="https://assets.adobedtm.com/activation/reactor/extensionbridge/extensionbridge.min.js"></script>
     <script>
       extensionBridge.register({
         init: function(info) {
           if (info.settings) {
-            document.getElementById('delay').value = info.settings.delay;
+            // TODO Populate form values from persisted settings.
           }
         },
 
         getSettings: function() {
-          return {
-            delay: Number(document.getElementById('delay').value) || 1000
-          };
+          // TODO Return settings object from form values.
         },
 
         validate: function() {
-          return !isNaN(document.getElementById('delay').value);
+          // TODO Return whether settings are valid.
         }
       });
     </script>

@@ -2,13 +2,5 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "delay": {
-      "type": "number",
-      "minimum": 1
-    },
-    "required": [
-      "delay"
-    ],
-    "additionalProperties": false
   }
 }

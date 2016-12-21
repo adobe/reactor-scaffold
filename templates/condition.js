@@ -1,1 +1,5 @@
-console.log('condition');
+'use strict';
+
+module.exports = function(settings) {
+  // TODO Return whether the condition passes.
+};

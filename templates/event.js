@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = function(settings, trigger) {
-  setTimeout(trigger, settings.delay);
+  // TODO Start watching for an event. Call trigger when the event occurs.
 };

@@ -1,10 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Action</title>
   </head>
   <body>
-    action
+    Action Template
+
+    <script src="https://assets.adobedtm.com/activation/reactor/extensionbridge/extensionbridge.min.js"></script>
+    <script>
+      extensionBridge.register({
+        init: function(info) {
+          if (info.settings) {
+            // TODO Populate form values from persisted settings.
+          }
+        },
+
+        getSettings: function() {
+          // TODO Return settings object from form values.
+        },
+
+        validate: function() {
+          // TODO Return whether settings are valid.
+        }
+      });
+    </script>
   </body>
 </html>
