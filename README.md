@@ -17,7 +17,7 @@ npm init
 
 You will need to provide the information requested on the screen. After this process is complete, you should have a file called `package.json` inside your folder.
 
-You will then need to install extension-support-scafold and save it in your project's [`devDependencies`](https://docs.npmjs.com/files/package.json#devdependencies) by running
+You will then need to install extension-support-scaffold and save it in your project's [`devDependencies`](https://docs.npmjs.com/files/package.json#devdependencies) by running
 ```
 echo "@reactor:registry=https://artifactory.corp.adobe.com/artifactory/api/npm/npm-mcps-release-local/" > .npmrc
 npm install @reactor/extension-support-scaffold --save-dev
