@@ -222,7 +222,7 @@ const getNamePrompt = (nameSingular, invalidNames = []) => {
         return answers.displayName
           .toLowerCase()
           .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9~_\\.\\-]/g, '');
+          .replace(/[^a-z0-9~_.-]/g, '');
       }
     },
     validate(input) {
