@@ -279,7 +279,7 @@ const promptTopLevelFields = (manifest) => {
     {
       type: 'input',
       name: 'author',
-      message: 'What is the author? This can be the name of an individual, company, or group.',
+      message: 'Who is the author? This can be the name of an individual, company, or group.',
       validate(input) {
         if (!input.length) {
           return 'Required.';
