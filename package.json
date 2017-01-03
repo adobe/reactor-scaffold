@@ -1,6 +1,6 @@
 {
   "name": "@reactor/extension-support-scaffold",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Command-line scaffolding tool for building Reactor extensions",
   "author": {
     "name": "DTM",
