@@ -23,7 +23,7 @@ echo "@reactor:registry=https://artifactory.corp.adobe.com/artifactory/api/npm/n
 npm install @reactor/extension-support-scaffold --save-dev
 ```
 
-While that will install the latest version, you my find a list of all versions under the [extension-support-turbine package](https://artifactory.corp.adobe.com/artifactory/webapp/#/artifacts/browse/tree/General/npm-mcps-release-local/@reactor/extension-support-turbine/-/@reactor) within Artifactory.
+While that will install the latest version, you my find a list of all versions under the [extension-support-scaffold package](https://artifactory.corp.adobe.com/artifactory/webapp/#/artifacts/browse/tree/General/npm-mcps-release-local/@reactor/extension-support-scaffold/-/@reactor) within Artifactory.
 
 ## Usage
 
