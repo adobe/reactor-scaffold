@@ -6,7 +6,7 @@ module.exports = {
     namePlural: 'extension configurations',
     manifestNodeName: 'configuration',
     viewTemplatePath: path.join(__dirname, '../templates/configuration.html'),
-    schemaTemplatePath: path.join(__dirname, '../templates/configuration.json')
+    schemaTemplatePath: path.join(__dirname, '../templates/configurationSchema.json')
   },
   event: {
     nameSingular: 'event',
