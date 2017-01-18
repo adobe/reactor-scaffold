@@ -83,15 +83,6 @@ const writeManifest = (manifest, prevManifest) => {
   ].forEach(writeStandardDelegates.bind(this, manifest, prevManifest));
 
   fs.writeJsonSync(path.join(cwd, 'extension.json'), manifest);
-
-  // We have to validate AFTER writing files because the validation checks to see if the
-  // files exist.
-  const error = validate(manifest);
-
-  if (error) {
-    console.error('Your extension does not pass validation. This could be a bug with the ' +
-      'scaffold tool. Error: ' + error);
-  }
 };
 
 const buildConfigurationDescriptor = (manifest) => {
@@ -107,9 +98,9 @@ const buildStandardDescriptor = (manifest, delegateMeta) => {
 
   return inquirer.prompt([
     getDisplayNamePrompt(delegateMeta.nameSingular),
-    getNamePrompt(delegateMeta.nameSingular, invalidNames),
     getViewPrompt(delegateMeta.nameSingular)
-  ]).then(({ displayName, name, needsView }) => {
+  ]).then(({ displayName, needsView }) => {
+    const name = deriveNameFromDisplayName(displayName, invalidNames);
     const descriptor = {
       displayName,
       name,
@@ -132,7 +123,23 @@ const buildSharedModule = (manifest) => {
     .map((existingDescriptor) => existingDescriptor.name);
 
   return inquirer.prompt([
-    getNamePrompt(delegateMeta.nameSingular, invalidNames)
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What is the name of the shared module? Other extensions will access the ' +
+        'shared module by this name. It must consist of lowercase, URL-safe characters.',
+      validate(input) {
+        if (invalidNames.indexOf(input) !== -1) {
+          return input + ' is already being used.';
+        }
+
+        if (!new RegExp(schema.definitions.name.pattern).test(input)) {
+          return 'Required. Must consist of lowercase, URL-safe characters.'
+        }
+
+        return true;
+      }
+    }
   ]).then(({ name }) => {
     const descriptor = {
       name,
@@ -211,32 +218,27 @@ const getDisplayNamePrompt = (nameSingular) => {
   };
 };
 
-const getNamePrompt = (nameSingular, invalidNames = []) => {
-  return {
-    type: 'input',
-    name: 'name',
-    message: `What is the name of the ${nameSingular}? This won't be shown to users of DTM; it's merely a simple identifier. It must consist of lowercase, URL-safe characters.`,
-    default(answers) {
-      if (answers.displayName) {
-        // Attempt at making a decent default name based on the display name they provided.
-        return answers.displayName
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z0-9~_.-]/g, '');
-      }
-    },
-    validate(input) {
-      if (invalidNames.indexOf(input) !== -1) {
-        return input + ' is already being used.';
-      }
+const deriveNameFromDisplayName = (displayName, invalidNames = []) => {
+  let suffixIncrementor = 0;
+  let name;
 
-      if (!new RegExp(schema.definitions.name.pattern).test(input)) {
-        return 'Required. Must consist of lowercase, URL-safe characters.'
-      }
+  do {
+    // Attempt making a decent default name based on the display name they provided.
+    // If the produced name is already used, start adding an incremental
+    // prefix (name-1, name-2, etc.)
+    name = displayName
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9~_.-]/g, '');
 
-      return true;
+    if (suffixIncrementor) {
+      name += '-' + suffixIncrementor;
     }
-  };
+
+    suffixIncrementor++;
+  } while (invalidNames.indexOf(name) !== -1);
+
+  return name
 };
 
 const getViewPrompt = (nameSingular) => {
@@ -250,7 +252,6 @@ const getViewPrompt = (nameSingular) => {
 const promptTopLevelFields = (manifest) => {
   return inquirer.prompt([
     getDisplayNamePrompt('extension'),
-    getNamePrompt('extension'),
     {
       type: 'input',
       name: 'version',
@@ -295,8 +296,8 @@ const promptTopLevelFields = (manifest) => {
       manifest.displayName = answers.displayName;
     }
 
-    if (answers.name) {
-      manifest.name = answers.name;
+    if (!manifest.name) {
+      manifest.name = deriveNameFromDisplayName(manifest.displayName);
     }
 
     if (answers.version) {
@@ -324,9 +325,29 @@ const main = () => {
   const manifest = readManifest();
   const prevManifest = clone(manifest);
 
+  console.log('Welcome to the scaffolding tool. Let\'s build the foundational structure for ' +
+    'your extension. To learn more about the components of an extension, please reference the ' +
+    'extension development guide at http://reactor.corp.adobe.com/guides/extensions/.');
+
   promptTopLevelFields(manifest)
     .then(() => promptMainMenu(manifest))
-    .then(() => writeManifest(manifest, prevManifest));
+    .then(() => writeManifest(manifest, prevManifest))
+    .then(() => {
+      // We have to validate AFTER writing files because the validation checks to see if the
+      // files exist.
+      const error = validate(manifest);
+      if (error) {
+        return Promise.reject('Your extension does not pass validation. This could be a bug ' +
+          'with the scaffold tool. Error: ' + error);
+      }
+    })
+    .then(() => {
+      console.log('Scaffolding complete. You may run the tool again at any time to add to your ' +
+        'extension.');
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 main();
