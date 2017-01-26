@@ -5,8 +5,8 @@ const clone = require('clone');
 const path = require('path');
 const fs = require('fs-extra');
 const camelCase = require('camelcase');
-const schema = require('@reactor/turbine-schemas/schemas/extension-package.json');
-const validate = require('@reactor/extension-support-validator');
+const schema = require('@adobe/composer-turbine-schemas/schemas/extension-package.json');
+const validate = require('@adobe/composer-validator');
 const delegatesMeta = require('./delegateMeta');
 
 const cwd = process.cwd();

@@ -1,7 +1,7 @@
 {
-  "name": "@reactor/extension-support-scaffold",
+  "name": "@adobe/composer-scaffold",
   "version": "1.1.0",
-  "description": "Command-line scaffolding tool for building Reactor extensions",
+  "description": "Command-line scaffolding tool for building Composer extensions",
   "author": {
     "name": "DTM",
     "email": "DTM-Engineering@adobe.com"
@@ -10,20 +10,17 @@
     "type": "git",
     "url": "git@git.corp.adobe.com:reactor/extension-support-scaffold.git"
   },
-  "publishConfig": {
-    "registry": "https://artifactory.corp.adobe.com/artifactory/api/npm/npm-mcps-release-local"
-  },
   "keywords": [
     "turbine",
     "extension",
     "dtm"
   ],
   "bin": {
-    "reactor-scaffold": "./bin/index.js"
+    "composer-scaffold": "./bin/index.js"
   },
   "dependencies": {
-    "@reactor/extension-support-validator": "*",
-    "@reactor/turbine-schemas": "*",
+    "@adobe/composer-validator": "*",
+    "@adobe/composer-turbine-schemas": "*",
     "camelcase": "^4.0.0",
     "clone": "^2.1.0",
     "fs-extra": "^1.0.0",
