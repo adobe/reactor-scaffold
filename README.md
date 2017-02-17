@@ -1,5 +1,5 @@
-# extension-support-scaffold
-A command-line scaffolding tool for building Reactor extensions.
+# @adobe/reactor-scaffold
+A command-line scaffolding tool for building extensions.
 
 ## Installing
 
@@ -17,17 +17,14 @@ npm init
 
 You will need to provide the information requested on the screen. After this process is complete, you should have a file called `package.json` inside your folder.
 
-You will then need to install extension-support-scaffold and save it in your project's [`devDependencies`](https://docs.npmjs.com/files/package.json#devdependencies) by running
+You will then need to install `@adobe/reactor-scaffold` and save it in your project's [`devDependencies`](https://docs.npmjs.com/files/package.json#devdependencies) by running
 ```
-echo "@reactor:registry=https://artifactory.corp.adobe.com/artifactory/api/npm/npm-mcps-release-local/" > .npmrc
-npm install @reactor/extension-support-scaffold --save-dev
+npm install @adobe/reactor-scaffold --save-dev
 ```
-
-While that will install the latest version, you my find a list of all versions under the [extension-support-scaffold package](https://artifactory.corp.adobe.com/artifactory/webapp/#/artifacts/browse/tree/General/npm-mcps-release-local/@reactor/extension-support-scaffold/-/@reactor) within Artifactory.
 
 ## Usage
 
-Run `node_modules/.bin/reactor-scaffold` from the command line within your project's directory. From there, just follow the prompts.
+Run `node_modules/.bin/reactor-scaffold` from the command line within your project's directory. From there, just follow the prompts. You may run the scaffold tool multiple times to add additional functionality to your extension.
 
 Rather than type the path to the `reactor-scaffold` script each time you would like the run the tool, you may wish to set up a [script alias](https://docs.npmjs.com/misc/scripts) by adding a `scripts` node to your `package.json` as follows:
 
