@@ -172,19 +172,19 @@ const buildSharedModule = (manifest) => {
 const promptMainMenu = (manifest) => {
   const choices = [
     {
-      name: 'Add an event delegate',
+      name: 'Add an event type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.event)
     },
     {
-      name: 'Add a condition delegate',
+      name: 'Add a condition type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.condition)
     },
     {
-      name: 'Add an action delegate',
+      name: 'Add an action type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.action)
     },
     {
-      name: 'Add a data element delegate',
+      name: 'Add a data element type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.dataElement)
     },
     {
