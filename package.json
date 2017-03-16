@@ -3,8 +3,9 @@
   "version": "1.1.4",
   "description": "Command-line scaffolding tool for building extensions",
   "author": {
-    "name": "DTM",
-    "email": "DTM-Engineering@adobe.com"
+    "name": "Adobe Systems Incorporated",
+    "url": "http://adobe.com",
+    "email": "reactor@adobe.com"
   },
   "repository": {
     "type": "git",
