@@ -1,7 +1,7 @@
 {
   "name": "@adobe/reactor-scaffold",
   "version": "1.1.6",
-  "description": "Command-line scaffolding tool for building extensions",
+  "description": "Command line scaffolding tool for building Launch extensions.",
   "author": {
     "name": "Adobe Systems",
     "url": "http://adobe.com",
@@ -9,12 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.corp.adobe.com:reactor/extension-support-scaffold.git"
+    "url": "git@github.com:Adobe-Marketing-Cloud/reactor-scaffold.git"
   },
   "keywords": [
-    "turbine",
-    "extension",
-    "dtm"
+    "launch",
+    "extension"
   ],
   "bin": {
     "reactor-scaffold": "./bin/index.js"

@@ -1,5 +1,5 @@
 # @adobe/reactor-scaffold
-A command-line scaffolding tool for building extensions.
+A command line scaffolding tool for building Launch extensions.
 
 ## Installing
 
