@@ -1,4 +1,7 @@
 # @adobe/reactor-scaffold
+
+[![npm (scoped)](https://img.shields.io/npm/v/@adobe/reactor-scaffold.svg?style=flat)](https://www.npmjs.com/package/@adobe/reactor-scaffold)
+
 A command line scaffolding tool for building Launch extensions.
 
 ## Installing
