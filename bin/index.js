@@ -219,7 +219,8 @@ const getDisplayNamePrompt = (nameSingular) => {
   return {
     type: 'input',
     name: 'displayName',
-    message: `What is the display name of the ${nameSingular}? This will be shown to users of DTM.`,
+    message: `What is the display name of the ${nameSingular}? ` +
+      `This will be shown to users of Launch.`,
     validate(input) {
       if (!input.length) {
         return 'Required.';
@@ -240,8 +241,12 @@ const deriveNameFromDisplayName = (displayName, invalidNames = []) => {
     // prefix (name-1, name-2, etc.)
     name = displayName
       .toLowerCase()
+      // Replaces spaces with hyphens
       .replace(/\s+/g, '-')
-      .replace(/[^a-z0-9~_.-]/g, '');
+      // Removes URL-unsafe characters
+      .replace(/[^a-z0-9~_.-]/g, '')
+      // Turns Dun & Bradstreet into dun-bradstreet instead of dun--bradstreet
+      .replace(/-{2,}/g, '-');
 
     if (suffixIncrementor) {
       name += '-' + suffixIncrementor;
