@@ -52,7 +52,8 @@ const createViewBasePath = (manifest) => {
 const writeExtensionConfiguration = (manifest, prevManifest) => {
   if (manifest.configuration && !prevManifest.configuration) {
     const viewSrcPath = delegatesMeta.extensionConfiguration.viewTemplatePath;
-    const viewDestPath = path.join(cwd, manifest.viewBasePath, manifest.configuration.viewPath);
+    const viewDestPath =
+      path.posix.join(cwd, manifest.viewBasePath, manifest.configuration.viewPath);
     copyFile(viewSrcPath, viewDestPath);
   }
 };
@@ -116,12 +117,13 @@ const buildStandardDescriptor = (manifest, delegateMeta) => {
     const descriptor = {
       displayName,
       name,
-      libPath: path.join(LIB_PATH, delegateMeta.manifestNodeName, camelCase(name) + '.js'),
+      libPath: path.posix.join(LIB_PATH, delegateMeta.manifestNodeName, camelCase(name) + '.js'),
       schema: require(delegateMeta.schemaTemplatePath)
     };
 
     if (needsView) {
-      descriptor.viewPath = path.join(delegateMeta.manifestNodeName, camelCase(name) + '.html');
+      descriptor.viewPath =
+        path.posix.join(delegateMeta.manifestNodeName, camelCase(name) + '.html');
     }
 
     manifest[delegateMeta.manifestNodeName] = manifest[delegateMeta.manifestNodeName] || [];
@@ -155,7 +157,7 @@ const buildSharedModule = (manifest) => {
   ]).then(({ name }) => {
     const descriptor = {
       name,
-      libPath: path.join(LIB_PATH, delegateMeta.manifestNodeName, camelCase(name) + '.js')
+      libPath: path.posix.join(LIB_PATH, delegateMeta.manifestNodeName, camelCase(name) + '.js')
     };
 
     manifest[delegateMeta.manifestNodeName] = manifest[delegateMeta.manifestNodeName] || [];
