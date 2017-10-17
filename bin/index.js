@@ -336,7 +336,7 @@ const promptTopLevelFields = (manifest) => {
     // We could make this configurable, but then do we make where library files go configurable
     // as well? Then we would have to pass the library base path around separately since it's not a
     // direct property of the manifest like viewBasePath is.
-    manifest.viewBasePath = VIEW_PATH;
+    manifest.viewBasePath = manifest.viewBasePath || VIEW_PATH;
   });
 };
 
