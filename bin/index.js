@@ -24,6 +24,7 @@ const delegatesMeta = require('./delegateMeta');
 const cwd = process.cwd();
 const VIEW_PATH = 'src/view/';
 const LIB_PATH = 'src/lib/';
+const EXTENSION_GUIDE_URL = 'https://developer.adobelaunch.com/guides/extensions/';
 
 const readManifest = () => {
   try {
@@ -346,7 +347,7 @@ const main = () => {
 
   console.log('Welcome to the scaffolding tool. Let\'s build the foundational structure for ' +
     'your extension. To learn more about the components of an extension, please reference the ' +
-    'extension development guide at http://reactor.corp.adobe.com/guides/extensions/.');
+    'extension development guide at ' + EXTENSION_GUIDE_URL + '.');
 
   promptTopLevelFields(manifest)
     .then(() => promptMainMenu(manifest))
