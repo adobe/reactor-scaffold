@@ -302,7 +302,7 @@ const promptTopLevelFields = (manifest) => {
       type: 'input',
       name: 'description',
       message: 'Please provide a short description of your extension. This will be shown to ' +
-      'users of Launch. If your extension empowers a user to implement your product on their ' +
+      'users of Launch. If your extension empowers users to implement your product on their ' +
       'website, describe what your product does. There is no need to mention "Launch" or ' +
       '"Extension"; users will already know they are looking at a Launch extension.',
       validate(input) {
