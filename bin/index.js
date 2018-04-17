@@ -271,7 +271,20 @@ const getViewPrompt = (nameSingular) => {
 
 const promptTopLevelFields = (manifest) => {
   return inquirer.prompt([
-    getDisplayNamePrompt('extension'),
+    {
+      type: 'input',
+      name: 'displayName',
+      message: 'What is the display name of your extension? ' +
+      'This will be shown to users of Launch. There is no need to mention ' +
+      '"Launch" or "Extension"; users will already know they are looking at a Launch extension.',
+      validate(input) {
+        if (!input.length) {
+          return 'Required.';
+        }
+
+        return true;
+      }
+    },
     {
       type: 'input',
       name: 'version',
@@ -288,7 +301,10 @@ const promptTopLevelFields = (manifest) => {
     {
       type: 'input',
       name: 'description',
-      message: 'Please provide a short description of your extension.',
+      message: 'Please provide a short description of your extension. This will be shown to ' +
+      'users of Launch. If your extension empowers a user to implement your product on their ' +
+      'website, describe what your product does. There is no need to mention "Launch" or ' +
+      '"Extension"; users will already know they are looking at a Launch extension.',
       validate(input) {
         if (!input.length) {
           return 'Required.';
