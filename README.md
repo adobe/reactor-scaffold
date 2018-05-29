@@ -8,7 +8,7 @@ For more information regarding Launch, please visit our [product website](http:/
 
 ## Usage
 
-Before running the scaffolding tool, you must first have [Node.js](https://nodejs.org/en/) installed on your computer. Your npm version (npm comes bundles with Node.js) will need to be at least 5.2.0. You can check the installed version by running the following command from a command line:
+Before running the scaffolding tool, you must first have [Node.js](https://nodejs.org/en/) installed on your computer. Your npm version (npm comes bundled with Node.js) will need to be at least 5.2.0. You can check the installed version by running the following command from a command line:
                                                                                                       
 ```
 npm -v
