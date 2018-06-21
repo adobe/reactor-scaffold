@@ -114,9 +114,16 @@ const addExchangeUrl = (manifest) => {
       message: 'Please provide the URL to your extension’s listing on Adobe Exchange. ' +
         'Leave it blank if you don\'t have one.',
       validate(input) {
-        if (input.length && !input.match(/^https:\/\/www\.adobeexchange\.com\/experiencecloud\.details\..+\.html$/ig)) {
-          return 'Must match the pattern ' +
-            '"https://www.adobeexchange.com/experiencecloud.details.######.html".';
+        if (
+          input.length &&
+          !input.match(
+            /^https:\/\/www\.adobeexchange\.com\/experiencecloud\.details\..+\.html$/gi
+          )
+        ) {
+          return (
+            'Must match the pattern ' +
+            '"https://www.adobeexchange.com/experiencecloud.details.######.html".'
+          );
         }
 
         return true;
