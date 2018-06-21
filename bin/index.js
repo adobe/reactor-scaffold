@@ -106,6 +106,29 @@ const buildConfigurationDescriptor = (manifest) => {
   };
 };
 
+const addExchangeUrl = (manifest) => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'exchangeUrl',
+      message: 'Please provide the URL to your extension’s listing on Adobe Exchange. ' +
+        'Leave it blank if you don\'t have one.',
+      validate(input) {
+        if (input.length && !input.match(/^https:\/\/www\.adobeexchange\.com\/experiencecloud\.details\..+\.html$/ig)) {
+          return 'Must match the pattern ' +
+            '"https://www.adobeexchange.com/experiencecloud.details.######.html".';
+        }
+
+        return true;
+      }
+    }
+  ]).then(({ exchangeUrl }) => {
+    if (exchangeUrl) {
+      manifest.exchangeUrl = exchangeUrl;
+    }
+  });
+};
+
 const buildStandardDescriptor = (manifest, delegateMeta) => {
   const invalidNames = (manifest[delegateMeta.manifestNodeName] || [])
     .map((existingDescriptor) => existingDescriptor.name);
@@ -201,6 +224,13 @@ const promptMainMenu = (manifest) => {
     choices.unshift({
       name: 'Add an extension configuration view',
       value: buildConfigurationDescriptor
+    });
+  }
+
+  if (!manifest.exchangeUrl) {
+    choices.splice(choices.length - 2, 0, {
+      name: 'Add an Exchange URL',
+      value: addExchangeUrl
     });
   }
 
@@ -348,6 +378,10 @@ const promptTopLevelFields = (manifest) => {
       manifest.author = {
         name: answers.author
       };
+    }
+
+    if (answers.exchangeUrl) {
+      manifest.exchangeUrl = answers.exchangeUrl;
     }
 
     // We could make this configurable, but then do we make where library files go configurable
