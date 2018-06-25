@@ -20,6 +20,7 @@ const camelCase = require('camelcase');
 const schema = require('@adobe/reactor-turbine-schemas/schemas/extension-package.json');
 const validate = require('@adobe/reactor-validator');
 const delegatesMeta = require('./delegateMeta');
+const chalk = require('chalk');
 
 const cwd = process.cwd();
 const VIEW_PATH = 'src/view/';
@@ -136,6 +137,43 @@ const addExchangeUrl = (manifest) => {
   });
 };
 
+const addIconPath = (manifest) => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'iconPath',
+      message: 'The relative path to the icon that will be displayed for the extension within ' +
+        'Launch. It should not not begin with a slash. It must reference an SVG file with a .svg ' +
+        'extension. The SVG should be square and may be scaled by Launch. Leave it blank if you ' +
+        'don\'t have one.',
+      validate(input) {
+        if (input.length && !input.match(/^(?!\/).+$/gi)) {
+          return 'Must not start with a "/".';
+        }
+
+        if (input.length && !input.match(/\.svg$/gi)) {
+          return 'The icon must have a .svg extension.';
+        }
+
+        return true;
+      }
+    }
+  ]).then(({ iconPath }) => {
+    if (iconPath) {
+      const iconPathOnDisk = `${cwd}/${iconPath}`;
+      if (!fs.existsSync(iconPathOnDisk)) {
+        console.log(
+          chalk.yellow(
+            `Please don't forget to add an icon at the following location: "${iconPathOnDisk}".`
+          )
+        );
+      }
+
+      manifest.iconPath = iconPath;
+    }
+  });
+};
+
 const buildStandardDescriptor = (manifest, delegateMeta) => {
   const invalidNames = (manifest[delegateMeta.manifestNodeName] || [])
     .map((existingDescriptor) => existingDescriptor.name);
@@ -238,6 +276,13 @@ const promptMainMenu = (manifest) => {
     choices.splice(choices.length - 2, 0, {
       name: 'Add an Exchange URL',
       value: addExchangeUrl
+    });
+  }
+
+  if (!manifest.iconPath) {
+    choices.splice(choices.length - 2, 0, {
+      name: 'Add an icon path',
+      value: addIconPath
     });
   }
 
@@ -389,6 +434,10 @@ const promptTopLevelFields = (manifest) => {
 
     if (answers.exchangeUrl) {
       manifest.exchangeUrl = answers.exchangeUrl;
+    }
+
+    if (answers.iconPath) {
+      manifest.iconPath = answers.iconPath;
     }
 
     // We could make this configurable, but then do we make where library files go configurable
