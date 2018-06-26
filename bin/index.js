@@ -112,11 +112,13 @@ const addExchangeUrl = (manifest) => {
     {
       type: 'input',
       name: 'exchangeUrl',
-      message: 'Please provide the URL to your extension’s listing on Adobe Exchange. ' +
-        'Leave it blank if you don\'t have one.',
+      message: 'Please provide the URL to your extension\'s listing on Adobe Exchange.',
       validate(input) {
+        if (!input.length) {
+          return 'Required.';
+        }
+
         if (
-          input.length &&
           !input.match(
             /^https:\/\/www\.adobeexchange\.com\/experiencecloud\.details\..+\.html$/gi
           )
@@ -144,14 +146,17 @@ const addIconPath = (manifest) => {
       name: 'iconPath',
       message: 'The relative path to the icon that will be displayed for the extension within ' +
         'Launch. It should not not begin with a slash. It must reference an SVG file with a .svg ' +
-        'extension. The SVG should be square and may be scaled by Launch. Leave it blank if you ' +
-        'don\'t have one.',
+        'extension. The SVG should be square and may be scaled by Launch.',
       validate(input) {
-        if (input.length && !input.match(/^(?!\/).+$/gi)) {
+        if (!input.length) {
+          return 'Required.';
+        }
+
+        if (!input.match(/^(?!\/).+$/gi)) {
           return 'Must not start with a "/".';
         }
 
-        if (input.length && !input.match(/\.svg$/gi)) {
+        if (!input.match(/\.svg$/gi)) {
           return 'The icon must have a .svg extension.';
         }
 
@@ -160,7 +165,7 @@ const addIconPath = (manifest) => {
     }
   ]).then(({ iconPath }) => {
     if (iconPath) {
-      const iconPathOnDisk = `${cwd}/${iconPath}`;
+      const iconPathOnDisk = path.join(cwd, iconPath);
       if (!fs.existsSync(iconPathOnDisk)) {
         console.log(
           chalk.yellow(
@@ -235,7 +240,16 @@ const buildSharedModule = (manifest) => {
 };
 
 const promptMainMenu = (manifest) => {
-  const choices = [
+  const choices = [];
+
+  if (!manifest.configuration) {
+    choices.push({
+      name: 'Add an extension configuration view',
+      value: buildConfigurationDescriptor
+    });
+  }
+
+  choices.push(
     {
       name: 'Add an event type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.event)
@@ -255,7 +269,24 @@ const promptMainMenu = (manifest) => {
     {
       name: 'Add a shared module',
       value: buildSharedModule
-    },
+    }
+  );
+
+  if (!manifest.exchangeUrl) {
+    choices.push({
+      name: 'Add an Exchange URL',
+      value: addExchangeUrl
+    });
+  }
+
+  if (!manifest.iconPath) {
+    choices.push({
+      name: 'Add an icon path',
+      value: addIconPath
+    });
+  }
+
+  choices.push(
     new inquirer.Separator(),
     {
       name: 'I\'m done.',
@@ -263,28 +294,7 @@ const promptMainMenu = (manifest) => {
         return Promise.resolve(true);
       }
     }
-  ];
-
-  if (!manifest.configuration) {
-    choices.unshift({
-      name: 'Add an extension configuration view',
-      value: buildConfigurationDescriptor
-    });
-  }
-
-  if (!manifest.exchangeUrl) {
-    choices.splice(choices.length - 2, 0, {
-      name: 'Add an Exchange URL',
-      value: addExchangeUrl
-    });
-  }
-
-  if (!manifest.iconPath) {
-    choices.splice(choices.length - 2, 0, {
-      name: 'Add an icon path',
-      value: addIconPath
-    });
-  }
+  );
 
   return inquirer.prompt({
     type: 'list',
