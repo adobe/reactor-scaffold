@@ -20,6 +20,7 @@ const camelCase = require('camelcase');
 const schema = require('@adobe/reactor-turbine-schemas/schemas/extension-package.json');
 const validate = require('@adobe/reactor-validator');
 const delegatesMeta = require('./delegateMeta');
+const chalk = require('chalk');
 
 const cwd = process.cwd();
 const VIEW_PATH = 'src/view/';
@@ -106,6 +107,78 @@ const buildConfigurationDescriptor = (manifest) => {
   };
 };
 
+const addExchangeUrl = (manifest) => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'exchangeUrl',
+      message: 'Please provide the URL to your extension\'s listing on Adobe Exchange.',
+      validate(input) {
+        if (!input.length) {
+          return 'Required.';
+        }
+
+        if (
+          !input.match(
+            /^https:\/\/www\.adobeexchange\.com\/experiencecloud\.details\..+\.html$/gi
+          )
+        ) {
+          return (
+            'Must match the pattern ' +
+            '"https://www.adobeexchange.com/experiencecloud.details.######.html".'
+          );
+        }
+
+        return true;
+      }
+    }
+  ]).then(({ exchangeUrl }) => {
+    if (exchangeUrl) {
+      manifest.exchangeUrl = exchangeUrl;
+    }
+  });
+};
+
+const addIconPath = (manifest) => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'iconPath',
+      message: 'The relative path to the icon that will be displayed for the extension within ' +
+        'Launch. It should not not begin with a slash. It must reference an SVG file with a .svg ' +
+        'extension. The SVG should be square and may be scaled by Launch.',
+      validate(input) {
+        if (!input.length) {
+          return 'Required.';
+        }
+
+        if (!input.match(/^(?!\/).+$/gi)) {
+          return 'Must not start with a "/".';
+        }
+
+        if (!input.match(/\.svg$/gi)) {
+          return 'The icon must have a .svg extension.';
+        }
+
+        return true;
+      }
+    }
+  ]).then(({ iconPath }) => {
+    if (iconPath) {
+      const iconPathOnDisk = path.join(cwd, iconPath);
+      if (!fs.existsSync(iconPathOnDisk)) {
+        console.log(
+          chalk.yellow(
+            `Please don't forget to add an icon at the following location: "${iconPathOnDisk}".`
+          )
+        );
+      }
+
+      manifest.iconPath = iconPath;
+    }
+  });
+};
+
 const buildStandardDescriptor = (manifest, delegateMeta) => {
   const invalidNames = (manifest[delegateMeta.manifestNodeName] || [])
     .map((existingDescriptor) => existingDescriptor.name);
@@ -167,7 +240,16 @@ const buildSharedModule = (manifest) => {
 };
 
 const promptMainMenu = (manifest) => {
-  const choices = [
+  const choices = [];
+
+  if (!manifest.configuration) {
+    choices.push({
+      name: 'Add an extension configuration view',
+      value: buildConfigurationDescriptor
+    });
+  }
+
+  choices.push(
     {
       name: 'Add an event type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.event)
@@ -187,7 +269,24 @@ const promptMainMenu = (manifest) => {
     {
       name: 'Add a shared module',
       value: buildSharedModule
-    },
+    }
+  );
+
+  if (!manifest.exchangeUrl) {
+    choices.push({
+      name: 'Add an Exchange URL',
+      value: addExchangeUrl
+    });
+  }
+
+  if (!manifest.iconPath) {
+    choices.push({
+      name: 'Add an icon path',
+      value: addIconPath
+    });
+  }
+
+  choices.push(
     new inquirer.Separator(),
     {
       name: 'I\'m done.',
@@ -195,14 +294,7 @@ const promptMainMenu = (manifest) => {
         return Promise.resolve(true);
       }
     }
-  ];
-
-  if (!manifest.configuration) {
-    choices.unshift({
-      name: 'Add an extension configuration view',
-      value: buildConfigurationDescriptor
-    });
-  }
+  );
 
   return inquirer.prompt({
     type: 'list',
@@ -348,6 +440,14 @@ const promptTopLevelFields = (manifest) => {
       manifest.author = {
         name: answers.author
       };
+    }
+
+    if (answers.exchangeUrl) {
+      manifest.exchangeUrl = answers.exchangeUrl;
+    }
+
+    if (answers.iconPath) {
+      manifest.iconPath = answers.iconPath;
     }
 
     // We could make this configurable, but then do we make where library files go configurable

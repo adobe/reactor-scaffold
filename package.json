@@ -20,11 +20,12 @@
     "reactor-scaffold": "./bin/index.js"
   },
   "dependencies": {
-    "@adobe/reactor-validator": "*",
     "@adobe/reactor-turbine-schemas": "*",
+    "@adobe/reactor-validator": "*",
     "camelcase": "^4.0.0",
+    "chalk": "^2.4.1",
     "clone": "^2.1.0",
     "fs-extra": "^1.0.0",
-    "inquirer": "^2.0.0"
+    "inquirer": "^6.0.0"
   }
 }
