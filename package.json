@@ -20,8 +20,8 @@
     "reactor-scaffold": "./bin/index.js"
   },
   "dependencies": {
-    "@adobe/reactor-turbine-schemas": "*",
-    "@adobe/reactor-validator": "*",
+    "@adobe/reactor-turbine-schemas": "^5.0.5",
+    "@adobe/reactor-validator": "^2.0.3",
     "camelcase": "^4.0.0",
     "chalk": "^2.4.1",
     "clone": "^2.1.0",

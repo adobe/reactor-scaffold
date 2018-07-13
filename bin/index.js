@@ -17,7 +17,9 @@ const clone = require('clone');
 const path = require('path');
 const fs = require('fs-extra');
 const camelCase = require('camelcase');
-const schema = require('@adobe/reactor-turbine-schemas/schemas/extension-package.json');
+const webSchema = require('@adobe/reactor-turbine-schemas/schemas/extension-package-web.json');
+const mobileSchema =
+  require('@adobe/reactor-turbine-schemas/schemas/extension-package-mobile.json');
 const validate = require('@adobe/reactor-validator');
 const delegatesMeta = require('./delegateMeta');
 const chalk = require('chalk');
@@ -65,7 +67,6 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
 
   if (manifest[nodeName]) {
     const viewSrcPath = delegateMeta.viewTemplatePath;
-    const libSrcPath = delegateMeta.libTemplatePath;
 
     manifest[nodeName]
     .filter((descriptor) => {
@@ -77,7 +78,9 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
         copyFile(viewSrcPath, viewDestPath);
       }
 
-      if (descriptor.libPath) { // This should always be the case but just in case
+      // Web extensions should always have this, but just in case
+      if (manifest.platform === 'web' && descriptor.libPath) {
+        const libSrcPath = delegateMeta.libTemplatePath;
         const libDestPath = path.join(cwd, descriptor.libPath);
         copyFile(libSrcPath, libDestPath);
       }
@@ -183,17 +186,25 @@ const buildStandardDescriptor = (manifest, delegateMeta) => {
   const invalidNames = (manifest[delegateMeta.manifestNodeName] || [])
     .map((existingDescriptor) => existingDescriptor.name);
 
-  return inquirer.prompt([
+  const questions = [
     getDisplayNamePrompt(delegateMeta.nameSingular),
-    getViewPrompt(delegateMeta.nameSingular)
-  ]).then(({ displayName, needsView }) => {
+  ];
+  if (manifest.platform === 'web') {
+    questions.push(getViewPrompt(delegateMeta.nameSingular));
+  }
+
+  return inquirer.prompt(questions).then(({ displayName, needsView = true }) => {
     const name = deriveNameFromDisplayName(displayName, invalidNames);
     const descriptor = {
       displayName,
       name,
-      libPath: path.posix.join(LIB_PATH, delegateMeta.manifestNodeName, camelCase(name) + '.js'),
       schema: require(delegateMeta.schemaTemplatePath)
     };
+
+    if (manifest.platform === 'web') {
+      descriptor.libPath =
+        path.posix.join(LIB_PATH, delegateMeta.manifestNodeName, camelCase(name) + '.js');
+    }
 
     if (needsView) {
       descriptor.viewPath =
@@ -221,7 +232,7 @@ const buildSharedModule = (manifest) => {
           return input + ' is already being used.';
         }
 
-        if (!new RegExp(schema.definitions.name.pattern).test(input)) {
+        if (!new RegExp(webSchema.definitions.name.pattern).test(input)) {
           return 'Required. Must consist of lowercase, URL-safe characters.'
         }
 
@@ -236,6 +247,89 @@ const buildSharedModule = (manifest) => {
 
     manifest[delegateMeta.manifestNodeName] = manifest[delegateMeta.manifestNodeName] || [];
     manifest[delegateMeta.manifestNodeName].push(descriptor);
+  });
+};
+
+const buildMavenRepository = (answers) => {
+  return inquirer.prompt([{
+    type: 'input',
+    name: 'groupId',
+    default: 'org.apache.maven',
+    message: 'What is the group id? Group id will identify your project uniquely across all ' +
+      'projects, so we need to enforce a naming schema.',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.maven.properties.groupId.pattern).test(input)) {
+        return 'Required. Must consist of word characters or dots.'
+      }
+
+      return true;
+    }
+  },{
+    type: 'input',
+    name: 'artifactId',
+    default: 'maven',
+    message: 'What is the artifact id? The artifact id is the name of the jar without version. ' +
+      'You can choose whatever name you want with lowercase letters and no strange symbols.',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.maven.properties.artifactId.pattern).test(input)) {
+        return 'Required. Must consist of word characters and dashes.'
+      }
+
+      return true;
+    }
+  },{
+    type: 'input',
+    name: 'version',
+    message: 'What version would you like to start with?',
+    default: '1.0.0',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.maven.properties.version.pattern).test(input)) {
+        return 'Required. Must match semantic versioning rules.';
+      }
+
+      return true;
+    }
+  }]).then(repositoryAnswers => {
+    answers.repositories = [{
+      ...repositoryAnswers
+    }];
+
+    return Promise.resolve(answers);
+  });
+};
+
+const buildCocoapodRepository = (answers) => {
+  return inquirer.prompt([{
+    type: 'input',
+    name: 'libraryName',
+    default: 'library.name',
+    message: 'What is the library name?',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.cocoapod.properties.libraryName.pattern)
+        .test(input)) {
+          return 'Required. Must consist of word characters or dots.'
+        }
+
+      return true;
+    }
+  },{
+    type: 'input',
+    name: 'version',
+    message: 'What version would you like to start with?',
+    default: '1.0.0',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.cocoapod.properties.version.pattern).test(input)) {
+        return 'Required. Must match semantic versioning rules.';
+      }
+
+      return true;
+    }
+  }]).then(repositoryAnswers => {
+    answers.repositories = [{
+      ...repositoryAnswers
+    }];
+
+    return Promise.resolve(answers);
   });
 };
 
@@ -265,12 +359,15 @@ const promptMainMenu = (manifest) => {
     {
       name: 'Add a data element type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.dataElement)
-    },
-    {
-      name: 'Add a shared module',
-      value: buildSharedModule
     }
   );
+
+  if (manifest.platform === 'web') {
+    choices.push({
+      name: 'Add a shared module',
+      value: buildSharedModule
+    });
+  }
 
   if (!manifest.exchangeUrl) {
     choices.push({
@@ -378,12 +475,18 @@ const promptTopLevelFields = (manifest) => {
       }
     },
     {
+      type: 'list',
+      name: 'platform',
+      message: 'What is the platform of your extension?',
+      choices: ['web', 'mobile']
+    },
+    {
       type: 'input',
       name: 'version',
       message: 'What version would you like to start with?',
       default: '1.0.0',
       validate(input) {
-        if (!new RegExp(schema.definitions.semver.pattern).test(input)) {
+        if (!new RegExp(webSchema.definitions.semver.pattern).test(input)) {
           return 'Required. Must match semantic versioning rules.';
         }
 
@@ -416,16 +519,35 @@ const promptTopLevelFields = (manifest) => {
 
         return true;
       }
+    },
+    {
+      type: 'list',
+      name: 'repositoryType',
+      message: 'What type of repository do you want to use?',
+      when: (answers) => {
+        return answers.platform === 'mobile'
+      },
+      choices: ['maven', 'cocoapod']
     }
-  ].filter((prompt) => {
-    return !manifest.hasOwnProperty(prompt.name);
-  })).then((answers) => {
+  ]).then((answers) => {
+    if (answers.repositoryType === 'maven') {
+      return buildMavenRepository(answers);
+    } else if (answers.repositoryType === 'cocoapod') {
+      return buildCocoapodRepository(answers);
+    }
+
+    return Promise.resolve(answers);
+  }).then((answers) => {
     if (answers.displayName) {
       manifest.displayName = answers.displayName;
     }
 
     if (!manifest.name) {
       manifest.name = deriveNameFromDisplayName(manifest.displayName);
+    }
+
+    if (answers.platform) {
+      manifest.platform = answers.platform;
     }
 
     if (answers.version) {
@@ -448,6 +570,10 @@ const promptTopLevelFields = (manifest) => {
 
     if (answers.iconPath) {
       manifest.iconPath = answers.iconPath;
+    }
+
+    if (answers.repositories) {
+      manifest.repositories = answers.repositories;
     }
 
     // We could make this configurable, but then do we make where library files go configurable
