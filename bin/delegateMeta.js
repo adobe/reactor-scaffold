@@ -26,7 +26,10 @@ module.exports = {
     manifestNodeName: 'events',
     viewTemplatePath: path.join(__dirname, '../templates/event.html'),
     libTemplatePath: path.join(__dirname, '../templates/event.js'),
-    schemaTemplatePath: path.join(__dirname, '../templates/eventSchema.json')
+    schemaTemplatePath: {
+      web: path.join(__dirname, '../templates/eventSchema.json'),
+      mobile: path.join(__dirname, '../templates/mobileEventSchema.json')
+    }
   },
   condition: {
     nameSingular: 'condition',
@@ -34,7 +37,10 @@ module.exports = {
     manifestNodeName: 'conditions',
     viewTemplatePath: path.join(__dirname, '../templates/condition.html'),
     libTemplatePath: path.join(__dirname, '../templates/condition.js'),
-    schemaTemplatePath: path.join(__dirname, '../templates/conditionSchema.json')
+    schemaTemplatePath: {
+      web: path.join(__dirname, '../templates/conditionSchema.json'),
+      mobile: path.join(__dirname, '../templates/mobileConditionSchema.json')
+    }
   },
   action: {
     nameSingular: 'action',
@@ -42,7 +48,10 @@ module.exports = {
     manifestNodeName: 'actions',
     viewTemplatePath: path.join(__dirname, '../templates/action.html'),
     libTemplatePath: path.join(__dirname, '../templates/action.js'),
-    schemaTemplatePath: path.join(__dirname, '../templates/actionSchema.json')
+    schemaTemplatePath: {
+      web: path.join(__dirname, '../templates/actionSchema.json'),
+      mobile: path.join(__dirname, '../templates/mobileActionSchema.json')
+    }
   },
   dataElement: {
     nameSingular: 'data element',
@@ -50,7 +59,10 @@ module.exports = {
     manifestNodeName: 'dataElements',
     viewTemplatePath: path.join(__dirname, '../templates/dataElement.html'),
     libTemplatePath: path.join(__dirname, '../templates/dataElement.js'),
-    schemaTemplatePath: path.join(__dirname, '../templates/dataElementSchema.json')
+    schemaTemplatePath: {
+      web: path.join(__dirname, '../templates/dataElementSchema.json'),
+      mobile: path.join(__dirname, '../templates/mobileDataElementSchema.json')
+    }
   },
   sharedModule: {
     nameSingular: 'shared module',
