@@ -538,7 +538,9 @@ const promptTopLevelFields = (manifest) => {
         return true;
       }
     }
-  ]).then((answers) => {
+  ].filter((prompt) => {
+    return !manifest.hasOwnProperty(prompt.name);
+  })).then((answers) => {
     if (answers.platform === 'mobile') {
       return buildMavenRepository(answers);
     }
