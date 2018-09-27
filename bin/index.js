@@ -269,7 +269,7 @@ const buildMavenRepository = (answers) => {
     type: 'input',
     name: 'artifact',
     default: 'com.mycompany.myextension:my-extension:1.0.0',
-    message: 'For Android we use Maven for dependency management, what is the fully qualified artifact name? ' +
+    message: 'For Android, we use Maven for dependency management. What is the fully qualified artifact name? ' +
       'This is in the form of <groupId>:<artifactId>:<version> You can choose whatever name you want with ' +
       'lowercase letters and no strange symbols.',
     validate(input) {
@@ -284,7 +284,7 @@ const buildMavenRepository = (answers) => {
       ...repositoryAnswers
     }];
 
-    return Promise.resolve(answers);
+    return answers;
   });
 };
 
@@ -293,7 +293,7 @@ const buildCocoapodRepository = (answers) => {
     type: 'input',
     name: 'name',
     default: 'myPod',
-    message: 'For iOS we use Cocoapods for dependency management, what is the name of the pod?',
+    message: 'For iOS, we use Cocoapods for dependency management. What is the name of the pod?',
     validate(input) {
       if (!input.length) {
           return 'Required. Must consist of word characters or dots.'
@@ -305,7 +305,7 @@ const buildCocoapodRepository = (answers) => {
     type: 'input',
     name: 'headerName',
     default: 'MyExtension/MyExtension.h',
-    message: 'For iOS what is the header name? This is how iOS developers will include your framework. ' +
+    message: 'For iOS, what is the header name? This is how iOS developers will include your framework. ' +
       'This is in the form of Framework_name/Header_filename.h',
     validate(input) {
       if (!new RegExp(mobileSchema.definitions.iosHeaderName.pattern)
@@ -319,7 +319,7 @@ const buildCocoapodRepository = (answers) => {
     type: 'input',
     name: 'interface',
     default: 'MyExtension',
-    message: 'For iOS what is the name of your extension interface. This is how iOS developers will ' +
+    message: 'For iOS, what is the name of your extension interface? This is how iOS developers will ' +
       'register your extension',
     validate(input) {
       if (!new RegExp(mobileSchema.definitions.iosInterface.pattern)
@@ -346,7 +346,7 @@ const buildCocoapodRepository = (answers) => {
       ...repositoryAnswers
     });
 
-    return Promise.resolve(answers);
+    return answers;
   });
 };
 
@@ -407,7 +407,8 @@ const promptMainMenu = (manifest) => {
       value: () => {
         return Promise.resolve(true);
       }
-    }
+    },
+    new inquirer.Separator()
   );
 
   return inquirer.prompt({
@@ -541,12 +542,12 @@ const promptTopLevelFields = (manifest) => {
     if (answers.platform === 'mobile') {
       return buildMavenRepository(answers);
     }
-    return Promise.resolve(answers);
+    return answers;
   }).then((answers) => {
     if (answers.platform === 'mobile') {
       return buildCocoapodRepository(answers);
     }
-    return Promise.resolve(answers);
+    return answers;
   }).then((answers) => {
     if (answers.displayName) {
       manifest.displayName = answers.displayName;
