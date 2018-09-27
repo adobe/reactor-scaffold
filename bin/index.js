@@ -198,7 +198,7 @@ const buildStandardDescriptor = (manifest, delegateMeta) => {
     const descriptor = {
       displayName,
       name,
-      schema: require(delegateMeta.schemaTemplatePath)
+      schema: require(delegateMeta.schemaTemplatePath[manifest.platform])
     };
 
     if (manifest.platform === 'web') {
@@ -253,38 +253,28 @@ const buildSharedModule = (manifest) => {
 const buildMavenRepository = (answers) => {
   return inquirer.prompt([{
     type: 'input',
-    name: 'groupId',
-    default: 'org.apache.maven',
-    message: 'What is the group id? Group id will identify your project uniquely across all ' +
-      'projects, so we need to enforce a naming schema.',
+    name: 'className',
+    default: 'com.mycompany.myExtension',
+    message: 'For Android, what is the fully qualified Java class name of your extension? This is how Android ' +
+      'developers will import your extension in their application.',
     validate(input) {
-      if (!new RegExp(mobileSchema.definitions.maven.properties.groupId.pattern).test(input)) {
-        return 'Required. Must consist of word characters or dots.'
+      if (!new RegExp(mobileSchema.definitions.javaClassName.pattern).test(input)) {
+        return 'Required. Must be a valid fully qualified Java class name that contains word ' +
+          'characters, underscores, and dots.'
       }
 
       return true;
     }
   },{
     type: 'input',
-    name: 'artifactId',
-    default: 'maven',
-    message: 'What is the artifact id? The artifact id is the name of the jar without version. ' +
-      'You can choose whatever name you want with lowercase letters and no strange symbols.',
+    name: 'artifact',
+    default: 'com.mycompany.myextension:my-extension:1.0.0',
+    message: 'For Android we use Maven for dependency management, what is the fully qualified artifact name? ' +
+      'This is in the form of <groupId>:<artifactId>:<version> You can choose whatever name you want with ' +
+      'lowercase letters and no strange symbols.',
     validate(input) {
-      if (!new RegExp(mobileSchema.definitions.maven.properties.artifactId.pattern).test(input)) {
-        return 'Required. Must consist of word characters and dashes.'
-      }
-
-      return true;
-    }
-  },{
-    type: 'input',
-    name: 'version',
-    message: 'What version would you like to start with?',
-    default: '1.0.0',
-    validate(input) {
-      if (!new RegExp(mobileSchema.definitions.maven.properties.version.pattern).test(input)) {
-        return 'Required. Must match semantic versioning rules.';
+      if (!new RegExp(mobileSchema.definitions.mavenFQArtifactName.pattern).test(input)) {
+        return 'Required. Must be in the form of <groupId>:<artifactId>:<version>'
       }
 
       return true;
@@ -301,12 +291,11 @@ const buildMavenRepository = (answers) => {
 const buildCocoapodRepository = (answers) => {
   return inquirer.prompt([{
     type: 'input',
-    name: 'libraryName',
-    default: 'library.name',
-    message: 'What is the library name?',
+    name: 'name',
+    default: 'myPod',
+    message: 'For iOS we use Cocoapods for dependency management, what is the name of the pod?',
     validate(input) {
-      if (!new RegExp(mobileSchema.definitions.cocoapod.properties.libraryName.pattern)
-        .test(input)) {
+      if (!input.length) {
           return 'Required. Must consist of word characters or dots.'
         }
 
@@ -314,20 +303,48 @@ const buildCocoapodRepository = (answers) => {
     }
   },{
     type: 'input',
+    name: 'headerName',
+    default: 'MyExtension/MyExtension.h',
+    message: 'For iOS what is the header name? This is how iOS developers will include your framework. ' +
+      'This is in the form of Framework_name/Header_filename.h',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.iosHeaderName.pattern)
+        .test(input)) {
+          return 'Required. Must have a framework name and a header file'
+        }
+
+      return true;
+    }
+  },{
+    type: 'input',
+    name: 'interface',
+    default: 'MyExtension',
+    message: 'For iOS what is the name of your extension interface. This is how iOS developers will ' +
+      'register your extension',
+    validate(input) {
+      if (!new RegExp(mobileSchema.definitions.iosInterface.pattern)
+        .test(input)) {
+          return 'Required. Must be a valid identifier.'
+        }
+
+      return true;
+    }
+  },{
+    type: 'input',
     name: 'version',
-    message: 'What version would you like to start with?',
+    message: 'For iOS, what is the pod version?',
     default: '1.0.0',
     validate(input) {
-      if (!new RegExp(mobileSchema.definitions.cocoapod.properties.version.pattern).test(input)) {
+      if (!new RegExp(mobileSchema.definitions.podVersion.pattern).test(input)) {
         return 'Required. Must match semantic versioning rules.';
       }
 
       return true;
     }
   }]).then(repositoryAnswers => {
-    answers.repositories = [{
+    answers.repositories.push({
       ...repositoryAnswers
-    }];
+    });
 
     return Promise.resolve(answers);
   });
@@ -369,7 +386,7 @@ const promptMainMenu = (manifest) => {
     });
   }
 
-  if (!manifest.exchangeUrl) {
+  if (manifest.platform === 'web' && !manifest.exchangeUrl) {
     choices.push({
       name: 'Add an Exchange URL',
       value: addExchangeUrl
@@ -519,23 +536,16 @@ const promptTopLevelFields = (manifest) => {
 
         return true;
       }
-    },
-    {
-      type: 'list',
-      name: 'repositoryType',
-      message: 'What type of repository do you want to use?',
-      when: (answers) => {
-        return answers.platform === 'mobile'
-      },
-      choices: ['maven', 'cocoapod']
     }
   ]).then((answers) => {
-    if (answers.repositoryType === 'maven') {
+    if (answers.platform === 'mobile') {
       return buildMavenRepository(answers);
-    } else if (answers.repositoryType === 'cocoapod') {
+    }
+    return Promise.resolve(answers);
+  }).then((answers) => {
+    if (answers.platform === 'mobile') {
       return buildCocoapodRepository(answers);
     }
-
     return Promise.resolve(answers);
   }).then((answers) => {
     if (answers.displayName) {
