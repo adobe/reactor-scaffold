@@ -6,7 +6,7 @@ Launch, by Adobe, is a next-generation tag management solution enabling simplifi
 
 The scaffold tool allows extension developers to quickly and easily build out the initial file structure of a Launch extension. The scaffolding tool will ask questions and build out appropriate files according to the responses given.
 
-For more information about developing an extension for Launch, please visit our [extension development guide](https://developer.adobelaunch.com/guides/extensions/).
+For more information about developing an extension for Launch, please visit our [extension development guide](https://developer.adobelaunch.com/extensions/).
 
 ## Usage
 
