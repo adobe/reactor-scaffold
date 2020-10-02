@@ -51,7 +51,7 @@ const copyFile = (fromPath, toPath) => {
   }
 };
 
-const createViewBasePath = manifest => {
+const createViewBasePath = (manifest) => {
   fs.mkdirsSync(manifest.viewBasePath);
 };
 
@@ -74,15 +74,15 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
     const viewSrcPath = delegateMeta.viewTemplatePath;
 
     manifest[nodeName]
-      .filter(descriptor => {
+      .filter((descriptor) => {
         return (
           !prevManifest[nodeName] ||
           !prevManifest[nodeName].some(
-            prevDescriptor => prevDescriptor.name === descriptor.name
+            (prevDescriptor) => prevDescriptor.name === descriptor.name
           )
         );
       })
-      .forEach(descriptor => {
+      .forEach((descriptor) => {
         if (descriptor.viewPath) {
           const viewDestPath = path.join(
             cwd,
@@ -94,7 +94,7 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
 
         // Web extensions should always have this, but just in case
         if (
-          (manifest.platform === 'web' || manifest.platform === 'server') &&
+          (manifest.platform === 'web' || manifest.platform === 'edge') &&
           descriptor.libPath
         ) {
           const libSrcPath = delegateMeta.libTemplatePath;
@@ -120,14 +120,14 @@ const writeManifest = (manifest, prevManifest) => {
   fs.writeJsonSync(path.join(cwd, 'extension.json'), manifest);
 };
 
-const buildConfigurationDescriptor = manifest => {
+const buildConfigurationDescriptor = (manifest) => {
   manifest.configuration = {
     viewPath: 'configuration/configuration.html',
     schema: require(delegatesMeta.extensionConfiguration.schemaTemplatePath),
   };
 };
 
-const addExchangeUrl = manifest => {
+const addExchangeUrl = (manifest) => {
   return inquirer
     .prompt([
       {
@@ -162,7 +162,7 @@ const addExchangeUrl = manifest => {
     });
 };
 
-const addIconPath = manifest => {
+const addIconPath = (manifest) => {
   return inquirer
     .prompt([
       {
@@ -207,11 +207,11 @@ const addIconPath = manifest => {
 
 const buildStandardDescriptor = (manifest, delegateMeta) => {
   const invalidNames = (manifest[delegateMeta.manifestNodeName] || []).map(
-    existingDescriptor => existingDescriptor.name
+    (existingDescriptor) => existingDescriptor.name
   );
 
   const questions = [getDisplayNamePrompt(delegateMeta.nameSingular)];
-  if (manifest.platform === 'web' || manifest.platform === 'server') {
+  if (manifest.platform === 'web' || manifest.platform === 'edge') {
     questions.push(getViewPrompt(delegateMeta.nameSingular));
   }
 
@@ -225,7 +225,7 @@ const buildStandardDescriptor = (manifest, delegateMeta) => {
         schema: require(delegateMeta.schemaTemplatePath[manifest.platform]),
       };
 
-      if (manifest.platform === 'web' || manifest.platform === 'server') {
+      if (manifest.platform === 'web' || manifest.platform === 'edge') {
         descriptor.libPath = path.posix.join(
           LIB_PATH,
           delegateMeta.manifestNodeName,
@@ -246,10 +246,10 @@ const buildStandardDescriptor = (manifest, delegateMeta) => {
     });
 };
 
-const buildSharedModule = manifest => {
+const buildSharedModule = (manifest) => {
   const delegateMeta = delegatesMeta.sharedModule;
   const invalidNames = (manifest[delegateMeta.manifestNodeName] || []).map(
-    existingDescriptor => existingDescriptor.name
+    (existingDescriptor) => existingDescriptor.name
   );
 
   return inquirer
@@ -289,7 +289,7 @@ const buildSharedModule = manifest => {
     });
 };
 
-const buildMavenRepository = answers => {
+const buildMavenRepository = (answers) => {
   return inquirer
     .prompt([
       {
@@ -335,7 +335,7 @@ const buildMavenRepository = answers => {
         },
       },
     ])
-    .then(repositoryAnswers => {
+    .then((repositoryAnswers) => {
       answers.repositories = [
         {
           ...repositoryAnswers,
@@ -346,7 +346,7 @@ const buildMavenRepository = answers => {
     });
 };
 
-const buildCocoapodRepository = answers => {
+const buildCocoapodRepository = (answers) => {
   return inquirer
     .prompt([
       {
@@ -417,7 +417,7 @@ const buildCocoapodRepository = answers => {
         },
       },
     ])
-    .then(repositoryAnswers => {
+    .then((repositoryAnswers) => {
       answers.repositories.push({
         ...repositoryAnswers,
       });
@@ -426,7 +426,7 @@ const buildCocoapodRepository = answers => {
     });
 };
 
-const promptMainMenu = manifest => {
+const promptMainMenu = (manifest) => {
   const choices = [];
 
   if (!manifest.configuration) {
@@ -436,7 +436,7 @@ const promptMainMenu = manifest => {
     });
   }
 
-  if (manifest.platform !== 'server') {
+  if (manifest.platform !== 'edge') {
     choices.push({
       name: 'Add an event type',
       value: buildStandardDescriptor.bind(this, manifest, delegatesMeta.event),
@@ -466,7 +466,7 @@ const promptMainMenu = manifest => {
     }
   );
 
-  if (manifest.platform === 'web' || manifest.platform === 'server') {
+  if (manifest.platform === 'web') {
     choices.push({
       name: 'Add a shared module',
       value: buildSharedModule,
@@ -474,7 +474,7 @@ const promptMainMenu = manifest => {
   }
 
   if (
-    (manifest.platform === 'web' || manifest.platform === 'server') &&
+    (manifest.platform === 'web' || manifest.platform === 'edge') &&
     !manifest.exchangeUrl
   ) {
     choices.push({
@@ -508,15 +508,15 @@ const promptMainMenu = manifest => {
       message: 'What would you like to do?',
       choices,
     })
-    .then(answers => answers.execute(manifest))
-    .then(endMainMenu => {
+    .then((answers) => answers.execute(manifest))
+    .then((endMainMenu) => {
       if (!endMainMenu) {
         return promptMainMenu(manifest);
       }
     });
 };
 
-const getDisplayNamePrompt = nameSingular => {
+const getDisplayNamePrompt = (nameSingular) => {
   return {
     type: 'input',
     name: 'displayName',
@@ -560,7 +560,7 @@ const deriveNameFromDisplayName = (displayName, invalidNames = []) => {
   return name;
 };
 
-const getViewPrompt = nameSingular => {
+const getViewPrompt = (nameSingular) => {
   return {
     type: 'confirm',
     name: 'needsView',
@@ -568,7 +568,7 @@ const getViewPrompt = nameSingular => {
   };
 };
 
-const promptTopLevelFields = manifest => {
+const promptTopLevelFields = (manifest) => {
   return inquirer
     .prompt(
       [
@@ -591,7 +591,7 @@ const promptTopLevelFields = manifest => {
           type: 'list',
           name: 'platform',
           message: 'What is the platform of your extension?',
-          choices: ['web', 'mobile', 'server'],
+          choices: ['web', 'mobile', 'edge'],
         },
         {
           type: 'input',
@@ -635,23 +635,23 @@ const promptTopLevelFields = manifest => {
             return true;
           },
         },
-      ].filter(prompt => {
+      ].filter((prompt) => {
         return !manifest.hasOwnProperty(prompt.name);
       })
     )
-    .then(answers => {
+    .then((answers) => {
       if (answers.platform === 'mobile') {
         return buildMavenRepository(answers);
       }
       return answers;
     })
-    .then(answers => {
+    .then((answers) => {
       if (answers.platform === 'mobile') {
         return buildCocoapodRepository(answers);
       }
       return answers;
     })
-    .then(answers => {
+    .then((answers) => {
       if (answers.displayName) {
         manifest.displayName = answers.displayName;
       }
@@ -730,7 +730,7 @@ const main = () => {
           'extension.'
       );
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
     });
 };

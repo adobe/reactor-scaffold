@@ -39,7 +39,7 @@ module.exports = {
     libTemplatePath: path.join(__dirname, '../templates/condition.js'),
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/conditionSchema.json'),
-      server: path.join(__dirname, '../templates/conditionSchema.json'),
+      edge: path.join(__dirname, '../templates/conditionSchema.json'),
       mobile: path.join(__dirname, '../templates/mobileConditionSchema.json')
     }
   },
@@ -51,7 +51,7 @@ module.exports = {
     libTemplatePath: path.join(__dirname, '../templates/action.js'),
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/actionSchema.json'),
-      server: path.join(__dirname, '../templates/actionSchema.json'),
+      edge: path.join(__dirname, '../templates/actionSchema.json'),
       mobile: path.join(__dirname, '../templates/mobileActionSchema.json')
     }
   },
@@ -63,7 +63,7 @@ module.exports = {
     libTemplatePath: path.join(__dirname, '../templates/dataElement.js'),
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/dataElementSchema.json'),
-      server: path.join(__dirname, '../templates/dataElementSchema.json'),
+      edge: path.join(__dirname, '../templates/dataElementSchema.json'),
       mobile: path.join(__dirname, '../templates/mobileDataElementSchema.json')
     }
   },
