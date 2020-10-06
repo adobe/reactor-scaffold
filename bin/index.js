@@ -142,13 +142,10 @@ const addExchangeUrl = (manifest) => {
 
           if (
             !input.match(
-              /^https:\/\/www\.adobeexchange\.com\/experiencecloud\.details\..+\.html$/gi
+              /^https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]+\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/gi
             )
           ) {
-            return (
-              'Must match the pattern ' +
-              '"https://www.adobeexchange.com/experiencecloud.details.######.html".'
-            );
+            return 'Must be a URL.';
           }
 
           return true;
