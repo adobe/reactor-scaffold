@@ -57,7 +57,8 @@ const createViewBasePath = (manifest) => {
 
 const writeExtensionConfiguration = (manifest, prevManifest) => {
   if (manifest.configuration && !prevManifest.configuration) {
-    const viewSrcPath = delegatesMeta.extensionConfiguration.viewTemplatePath;
+    const viewSrcPath =
+      delegatesMeta.extensionConfiguration.viewTemplatePath[manifest.platform];
     const viewDestPath = path.posix.join(
       cwd,
       manifest.viewBasePath,
@@ -71,8 +72,6 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
   const nodeName = delegateMeta.manifestNodeName;
 
   if (manifest[nodeName]) {
-    const viewSrcPath = delegateMeta.viewTemplatePath;
-
     manifest[nodeName]
       .filter((descriptor) => {
         return (
@@ -84,6 +83,7 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
       })
       .forEach((descriptor) => {
         if (descriptor.viewPath) {
+          const viewSrcPath = delegateMeta.viewTemplatePath[manifest.platform];
           const viewDestPath = path.join(
             cwd,
             manifest.viewBasePath,
@@ -97,7 +97,7 @@ const writeStandardDelegates = (manifest, prevManifest, delegateMeta) => {
           (manifest.platform === 'web' || manifest.platform === 'edge') &&
           descriptor.libPath
         ) {
-          const libSrcPath = delegateMeta.libTemplatePath;
+          const libSrcPath = delegateMeta.libTemplatePath[manifest.platform];
           const libDestPath = path.join(cwd, descriptor.libPath);
           copyFile(libSrcPath, libDestPath);
         }
