@@ -17,60 +17,86 @@ module.exports = {
     nameSingular: 'extension configuration',
     namePlural: 'extension configurations',
     manifestNodeName: 'configuration',
-    viewTemplatePath: path.join(__dirname, '../templates/configuration.html'),
-    schemaTemplatePath: path.join(__dirname, '../templates/configurationSchema.json')
+    viewTemplatePath: {
+      web: path.join(__dirname, '../templates/configuration.html'),
+      edge: path.join(__dirname, '../templates/configuration.html'),
+    },
+    schemaTemplatePath: path.join(
+      __dirname,
+      '../templates/configurationSchema.json'
+    ),
   },
   event: {
     nameSingular: 'event',
     namePlural: 'events',
     manifestNodeName: 'events',
-    viewTemplatePath: path.join(__dirname, '../templates/event.html'),
-    libTemplatePath: path.join(__dirname, '../templates/event.js'),
+    viewTemplatePath: { web: path.join(__dirname, '../templates/event.html') },
+    libTemplatePath: { web: path.join(__dirname, '../templates/web/event.js') },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/eventSchema.json'),
-      mobile: path.join(__dirname, '../templates/mobileEventSchema.json')
-    }
+      mobile: path.join(__dirname, '../templates/mobileEventSchema.json'),
+    },
   },
   condition: {
     nameSingular: 'condition',
     namePlural: 'conditions',
     manifestNodeName: 'conditions',
-    viewTemplatePath: path.join(__dirname, '../templates/condition.html'),
-    libTemplatePath: path.join(__dirname, '../templates/condition.js'),
+    viewTemplatePath: {
+      web: path.join(__dirname, '../templates/condition.html'),
+      edge: path.join(__dirname, '../templates/condition.html'),
+    },
+    libTemplatePath: {
+      web: path.join(__dirname, '../templates/web/condition.js'),
+      edge: path.join(__dirname, '../templates/edge/condition.js'),
+    },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/conditionSchema.json'),
       edge: path.join(__dirname, '../templates/conditionSchema.json'),
-      mobile: path.join(__dirname, '../templates/mobileConditionSchema.json')
-    }
+      mobile: path.join(__dirname, '../templates/mobileConditionSchema.json'),
+    },
   },
   action: {
     nameSingular: 'action',
     namePlural: 'actions',
     manifestNodeName: 'actions',
-    viewTemplatePath: path.join(__dirname, '../templates/action.html'),
-    libTemplatePath: path.join(__dirname, '../templates/action.js'),
+    viewTemplatePath: {
+      web: path.join(__dirname, '../templates/action.html'),
+      edge: path.join(__dirname, '../templates/action.html'),
+    },
+    libTemplatePath: {
+      web: path.join(__dirname, '../templates/web/action.js'),
+      edge: path.join(__dirname, '../templates/edge/action.js'),
+    },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/actionSchema.json'),
       edge: path.join(__dirname, '../templates/actionSchema.json'),
-      mobile: path.join(__dirname, '../templates/mobileActionSchema.json')
-    }
+      mobile: path.join(__dirname, '../templates/mobileActionSchema.json'),
+    },
   },
   dataElement: {
     nameSingular: 'data element',
     namePlural: 'data elements',
     manifestNodeName: 'dataElements',
-    viewTemplatePath: path.join(__dirname, '../templates/dataElement.html'),
-    libTemplatePath: path.join(__dirname, '../templates/dataElement.js'),
+    viewTemplatePath: {
+      web: path.join(__dirname, '../templates/dataElement.html'),
+      edge: path.join(__dirname, '../templates/dataElement.html'),
+    },
+    libTemplatePath: {
+      web: path.join(__dirname, '../templates/web/dataElement.js'),
+      edge: path.join(__dirname, '../templates/edge/dataElement.js'),
+    },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/dataElementSchema.json'),
       edge: path.join(__dirname, '../templates/dataElementSchema.json'),
-      mobile: path.join(__dirname, '../templates/mobileDataElementSchema.json')
-    }
+      mobile: path.join(__dirname, '../templates/mobileDataElementSchema.json'),
+    },
   },
   sharedModule: {
     nameSingular: 'shared module',
     namePlural: 'shared modules',
     manifestNodeName: 'sharedModules',
-    libTemplatePath: path.join(__dirname, '../templates/sharedModule.js')
-  }
+    libTemplatePath: {
+      web: path.join(__dirname, '../templates/web/sharedModule.js'),
+    },
+  },
 };
