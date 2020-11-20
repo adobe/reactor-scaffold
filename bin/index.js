@@ -117,7 +117,7 @@ const writeManifest = (manifest, prevManifest) => {
     delegatesMeta.sharedModule,
   ].forEach(writeStandardDelegates.bind(this, manifest, prevManifest));
 
-  fs.writeJsonSync(path.join(cwd, 'extension.json'), manifest);
+  fs.writeJsonSync(path.join(cwd, 'extension.json'), manifest, { spaces: 2 });
 };
 
 const buildConfigurationDescriptor = (manifest) => {
