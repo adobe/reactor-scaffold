@@ -6,15 +6,11 @@ Launch, by Adobe, is a next-generation tag management solution enabling simplifi
 
 The scaffold tool allows extension developers to quickly and easily build out the initial file structure of a Launch extension. The scaffolding tool will ask questions and build out appropriate files according to the responses given.
 
-For more information about developing an extension for Launch, please visit our [extension development guide](https://developer.adobelaunch.com/extensions/).
+For more information about developing an extension for Launch, please visit our [extension development guide](https://experienceleague.adobe.com/docs/launch/using/extension-dev/overview.html#extension-dev).
 
 ## Usage
 
-Before running the scaffolding tool, you must first have [Node.js](https://nodejs.org/en/) installed on your computer. Your npm version (npm comes bundled with Node.js) will need to be at least 5.2.0. You can check the installed version by running the following command from a command line:
-
-```
-npm -v
-```
+Before running the scaffolding tool, you must first have [Node.js](https://nodejs.org/en/) installed on your computer.
 
 Once Node.js is installed, run the scaffold tool by executing the following command from the command line within your project's directory:
 
@@ -24,7 +20,7 @@ npx @adobe/reactor-scaffold
 
 ## Contributing
 
-Contributions are welcomed! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
+Contributions are welcomed! Read the [Contributing Guide](.github/CONTRIBUTING.md) for more information.
 
 To get started:
 
