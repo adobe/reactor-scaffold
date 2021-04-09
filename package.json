@@ -1,6 +1,6 @@
 {
   "name": "@adobe/reactor-scaffold",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "Command line scaffolding tool for building Launch extensions.",
   "author": {
     "name": "Adobe Systems",
