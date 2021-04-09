@@ -20,6 +20,7 @@ module.exports = {
     viewTemplatePath: {
       web: path.join(__dirname, '../templates/configuration.html'),
       edge: path.join(__dirname, '../templates/configuration.html'),
+      mobile: path.join(__dirname, '../templates/configuration.html'),
     },
     schemaTemplatePath: path.join(
       __dirname,
@@ -30,8 +31,14 @@ module.exports = {
     nameSingular: 'event',
     namePlural: 'events',
     manifestNodeName: 'events',
-    viewTemplatePath: { web: path.join(__dirname, '../templates/event.html') },
-    libTemplatePath: { web: path.join(__dirname, '../templates/web/event.js') },
+    viewTemplatePath: {
+      web: path.join(__dirname, '../templates/event.html'),
+      mobile: path.join(__dirname, '../templates/event.html'),
+    },
+    libTemplatePath: {
+      web: path.join(__dirname, '../templates/web/event.js'),
+      mobile: path.join(__dirname, '../templates/mobile/event.js'),
+    },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/eventSchema.json'),
       mobile: path.join(__dirname, '../templates/mobileEventSchema.json'),
@@ -44,10 +51,12 @@ module.exports = {
     viewTemplatePath: {
       web: path.join(__dirname, '../templates/condition.html'),
       edge: path.join(__dirname, '../templates/condition.html'),
+      mobile: path.join(__dirname, '../templates/condition.html'),
     },
     libTemplatePath: {
       web: path.join(__dirname, '../templates/web/condition.js'),
       edge: path.join(__dirname, '../templates/edge/condition.js'),
+      mobile: path.join(__dirname, '../templates/mobile/condition.js'),
     },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/conditionSchema.json'),
@@ -62,10 +71,12 @@ module.exports = {
     viewTemplatePath: {
       web: path.join(__dirname, '../templates/action.html'),
       edge: path.join(__dirname, '../templates/action.html'),
+      mobile: path.join(__dirname, '../templates/action.html'),
     },
     libTemplatePath: {
       web: path.join(__dirname, '../templates/web/action.js'),
       edge: path.join(__dirname, '../templates/edge/action.js'),
+      mobile: path.join(__dirname, '../templates/mobile/action.js'),
     },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/actionSchema.json'),
@@ -80,10 +91,12 @@ module.exports = {
     viewTemplatePath: {
       web: path.join(__dirname, '../templates/dataElement.html'),
       edge: path.join(__dirname, '../templates/dataElement.html'),
+      mobile: path.join(__dirname, '../templates/dataElement.html'),
     },
     libTemplatePath: {
       web: path.join(__dirname, '../templates/web/dataElement.js'),
       edge: path.join(__dirname, '../templates/edge/dataElement.js'),
+      mobile: path.join(__dirname, '../templates/mobile/dataElement.js'),
     },
     schemaTemplatePath: {
       web: path.join(__dirname, '../templates/dataElementSchema.json'),
@@ -97,6 +110,7 @@ module.exports = {
     manifestNodeName: 'sharedModules',
     libTemplatePath: {
       web: path.join(__dirname, '../templates/web/sharedModule.js'),
+      mobile: path.join(__dirname, '../templates/mobile/sharedModule.js'),
     },
   },
 };
