@@ -1,12 +1,12 @@
-# Launch Extension Scaffold Tool
+# Experience Platform Tags Extension Scaffold Tool
 
 [![npm (scoped)](https://img.shields.io/npm/v/@adobe/reactor-scaffold.svg?style=flat)](https://www.npmjs.com/package/@adobe/reactor-scaffold)
 
-Launch, by Adobe, is a next-generation tag management solution enabling simplified deployment of marketing technologies. For more information regarding Launch, please visit our [product website](http://www.adobe.com/enterprise/cloud-platform/launch.html).
+Experience Platform Tags, by Adobe, is a next-generation tag management solution enabling simplified deployment of marketing technologies. For more information regarding Experience Platform Tags, please visit our [product website](http://www.adobe.com/enterprise/cloud-platform/launch.html).
 
-The scaffold tool allows extension developers to quickly and easily build out the initial file structure of a Launch extension. The scaffolding tool will ask questions and build out appropriate files according to the responses given.
+The scaffold tool allows extension developers to quickly and easily build out the initial file structure of an Experience Platform Tags extension. The scaffolding tool will ask questions and build out appropriate files according to the responses given.
 
-For more information about developing an extension for Launch, please visit our [extension development guide](https://experienceleague.adobe.com/docs/launch/using/extension-dev/overview.html#extension-dev).
+For more information about developing an extension for Experience Platform Tags, please visit our [extension development guide](https://experienceleague.adobe.com/docs/experience-platform/tags/extension-dev/overview.html?lang=en).
 
 ## Usage
 
