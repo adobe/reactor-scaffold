@@ -2,11 +2,11 @@
 
 [![npm (scoped)](https://img.shields.io/npm/v/@adobe/reactor-scaffold.svg?style=flat)](https://www.npmjs.com/package/@adobe/reactor-scaffold)
 
-Experience Platform Tags, by Adobe, is a next-generation tag management solution enabling simplified deployment of marketing technologies. For more information regarding Experience Platform Tags, please visit our [product website](http://www.adobe.com/enterprise/cloud-platform/launch.html).
+Adobe Experience Platform Tags is a next-generation tag management solution enabling simplified deployment of marketing technologies. For more information regarding Tags, please visit our [product website](http://www.adobe.com/enterprise/cloud-platform/launch.html).
 
-The scaffold tool allows extension developers to quickly and easily build out the initial file structure of an Experience Platform Tags extension. The scaffolding tool will ask questions and build out appropriate files according to the responses given.
+The scaffold tool allows extension developers to quickly and easily build out the initial file structure of a Tags extension. The scaffolding tool will ask questions and build out appropriate files according to the responses given.
 
-For more information about developing an extension for Experience Platform Tags, please visit our [extension development guide](https://experienceleague.adobe.com/docs/experience-platform/tags/extension-dev/overview.html?lang=en).
+For more information about developing an extension for Tags, please visit our [extension development guide](https://experienceleague.adobe.com/docs/experience-platform/tags/extension-dev/overview.html?lang=en).
 
 ## Usage
 
