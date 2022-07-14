@@ -1,9 +1,9 @@
 {
   "name": "@adobe/reactor-scaffold",
   "version": "2.3.0",
-  "description": "Command line scaffolding tool for building Launch extensions.",
+  "description": "Command line scaffolding tool for building Tags extensions.",
   "author": {
-    "name": "Adobe Systems",
+    "name": "Adobe",
     "url": "http://adobe.com",
     "email": "reactor@adobe.com"
   },
