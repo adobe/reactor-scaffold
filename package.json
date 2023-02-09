@@ -1,6 +1,6 @@
 {
   "name": "@adobe/reactor-scaffold",
-  "version": "2.3.0",
+  "version": "2.4.0-beta.0",
   "description": "Command line scaffolding tool for building Tags extensions.",
   "author": {
     "name": "Adobe",
@@ -20,8 +20,8 @@
     "reactor-scaffold": "./bin/index.js"
   },
   "dependencies": {
-    "@adobe/reactor-turbine-schemas": "^10.3.0",
-    "@adobe/reactor-validator": "^2.2.0",
+    "@adobe/reactor-turbine-schemas": "^10.5.0-beta.0",
+    "@adobe/reactor-validator": "^2.3.0-beta.0",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
     "clone": "^2.1.2",
@@ -29,6 +29,6 @@
     "inquirer": "^7.3.3"
   },
   "engines": {
-    "node": ">=v12.13.0"
+    "node": ">=v14.21.2"
   }
 }
