@@ -22,11 +22,11 @@ jobs:
         run: |
           echo 'Only the tags "latest" or "next" are supported. You entered "${{ github.event.inputs.tag }}"'
           exit 1
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14.x
-      - uses: actions/cache@v2
+          node-version: 'lts/iron'
+      - uses: actions/cache@v4
         id: npm-cache
         with:
           path: '**/node_modules'
@@ -35,7 +35,8 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
       - run: npm test
-      - uses: JS-DevTools/npm-publish@v1
+      - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.ADOBE_BOT_NPM_TOKEN }}
           tag: ${{ github.event.inputs.tag || 'latest' }}
+          access: 'public'
